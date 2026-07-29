@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>가중치 이분 그래프 기반 성적 맞춤형 조 배정 앱</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+    :root { --ink:#102d45; --muted:#60798a; --paper:#f7f4ec; --line:#d6e0de; --mint:#bcefe0; --cyan:#3bd5d5; --coral:#ff765e; --sun:#f7cc58; --blue:#2865c7; }
+    * { box-sizing:border-box; } html,body { margin:0; width:600px; height:900px; background:var(--paper); } body { color:var(--ink); font-family:'IBM Plex Sans KR',sans-serif; }
+    .poster { position:relative; overflow:hidden; width:600px; height:900px; padding:35px 38px 27px; background:linear-gradient(135deg,#f9f7f0 0%,#f3f6ef 49%,#e7f7ef 100%); }
+    .poster::before { content:''; position:absolute; inset:0; opacity:.24; background-image:radial-gradient(#86a69a .65px,transparent .7px); background-size:9px 9px; pointer-events:none; }.poster>* { position:relative; z-index:1; }
+    .kicker { display:flex; justify-content:space-between; align-items:center; font:500 9px/1 'DM Mono',monospace; letter-spacing:.08em; color:#456174; }.tag { padding:6px 8px; border:1px solid #81b3aa; border-radius:20px; color:#126c65; background:#e7fbf5; }
+    h1 { width:390px; margin:20px 0 11px; font:700 28px/.99 'IBM Plex Sans KR',sans-serif; letter-spacing:-.08em; } h1 strong { display:block; color:var(--blue); }.lead { width:410px; margin:0; color:#536d7e; font-size:10.5px; line-height:1.55; letter-spacing:-.04em; }
+    .hero { position:absolute; right:-72px; top:84px; width:245px; height:170px; opacity:.92; }.hero svg { width:100%; height:100%; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:13px; margin-top:24px; }.card { min-height:166px; padding:14px 14px 12px; border:1px solid var(--line); border-radius:7px; background:rgba(255,255,255,.66); box-shadow:0 7px 18px rgba(24,65,74,.055); }.card.wide { grid-column:1/-1; min-height:122px; }
+    h2 { margin:0 0 9px; font:600 13px/1.1 'Space Grotesk','IBM Plex Sans KR',sans-serif; letter-spacing:-.05em; }h2 .n { display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; margin-right:5px; border-radius:50%; background:var(--ink); color:white; font:500 9px 'DM Mono'; vertical-align:2px; }p,li { margin:0; font-size:9.5px; line-height:1.54; letter-spacing:-.04em; }ul { margin:0; padding-left:14px; }li+li { margin-top:4px; }.mini-label { margin-top:7px; color:#0c7c73; font:500 8px 'DM Mono'; letter-spacing:.03em; }
+    .matching { display:grid; grid-template-columns:68px 1fr 64px; align-items:center; gap:6px; margin-top:7px; font-size:8px; }.people,.jobs { display:grid; gap:5px; }.node { padding:4px 4px; border-radius:3px; text-align:center; background:#ddf3e9; color:#20554f; }.jobs .node { background:#ffe1d9; color:#9b3f2d; }.links { position:relative; height:59px; }.links i { position:absolute; left:-2px; width:100%; height:1px; background:#699d9c; transform-origin:left; }.links i:nth-child(1){top:8px;transform:rotate(18deg)}.links i:nth-child(2){top:30px;transform:rotate(-1deg);background:var(--coral)}.links i:nth-child(3){top:52px;transform:rotate(-18deg)}
+    .process { display:grid; grid-template-columns:1fr 22px 1fr 22px 1fr; align-items:center; text-align:center; margin-top:8px; }.step { padding:8px 4px; border-radius:5px; background:#e4f8f2; font-size:8.5px; font-weight:600; line-height:1.35; }.step:nth-child(3) { background:#dff0ff; }.step:nth-child(5) { background:#ffe3c8; }.arrow { color:#579389; font:500 15px 'DM Mono'; }
+    .code { margin-top:7px; padding:8px 9px; overflow:hidden; border-radius:5px; background:#12334b; color:#dff4f2; font:400 7.5px/1.42 'DM Mono',monospace; white-space:pre; }.code .accent { color:#7fe1cf; }.code .coral { color:#ffab98; }
+    .quote { padding:12px 14px; border-radius:7px; color:#13374b; background:linear-gradient(100deg,#c5f2e5,#bce2ef); }.quote p { font-size:11px; font-weight:600; line-height:1.48; letter-spacing:-.05em; }.quote span { display:block; margin-top:6px; font:500 8px 'DM Mono'; color:#30716d; }.outcomes { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:10px; }.outcome { padding:8px 8px; border-left:3px solid var(--cyan); background:rgba(255,255,255,.57); }.outcome:nth-child(2){border-color:var(--coral)}.outcome:nth-child(3){border-color:var(--sun)}.outcome b { display:block; margin-bottom:3px; font:600 9px 'Space Grotesk','IBM Plex Sans KR'; }.outcome p { font-size:7.8px; line-height:1.46; }footer { display:flex; align-items:center; justify-content:space-between; margin-top:12px; padding-top:9px; border-top:1px solid #c7d9d3; color:#5e7785; font:500 8px 'DM Mono'; }.mark { color:#0c8476; font-size:10px; letter-spacing:.1em; }
+  </style>
+</head>
+<body>
+  <main class="poster">
+    <div class="kicker"><span>2026 / DISCRETE MATHEMATICS PROJECT</span><span class="tag">RESEARCH POSTER</span></div>
+    <h1>가중치 이분 그래프로<strong>공정한 조를 설계하다</strong></h1>
+    <p class="lead">학생 성적을 바탕으로 각 조의 평균이 균등해지도록, 최대 가중치 매칭으로 최적의 조합을 찾는 성적 맞춤형 조 배정 앱을 개발했습니다.</p>
+    <div class="hero"><svg viewBox="0 0 245 170" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M36 28L188 56M36 28L188 109M36 77L188 56M36 77L188 139M36 128L188 109M36 128L188 139" stroke="#8bbfb4" stroke-width="2"/><path d="M36 28L188 109M36 77L188 56M36 128L188 139" stroke="#ff765e" stroke-width="3.5"/><g fill="#2865c7"><circle cx="36" cy="28" r="13"/><circle cx="36" cy="77" r="13"/><circle cx="36" cy="128" r="13"/></g><g fill="#ff765e"><rect x="175" y="43" width="26" height="26" rx="5"/><rect x="175" y="96" width="26" height="26" rx="5"/><rect x="175" y="126" width="26" height="26" rx="5"/></g><text x="36" y="32" text-anchor="middle" fill="white" font-size="8" font-family="DM Mono">98</text><text x="36" y="81" text-anchor="middle" fill="white" font-size="8" font-family="DM Mono">82</text><text x="36" y="132" text-anchor="middle" fill="white" font-size="8" font-family="DM Mono">69</text><text x="188" y="59" text-anchor="middle" fill="white" font-size="8" font-family="DM Mono">42</text><text x="188" y="112" text-anchor="middle" fill="white" font-size="8" font-family="DM Mono">58</text><text x="188" y="142" text-anchor="middle" fill="white" font-size="8" font-family="DM Mono">71</text></svg></div>
+    <section class="grid">
+      <article class="card"><h2><span class="n">01</span>연구 동기와 목적</h2><p>조별 과제에서 특정 조에 상위권 또는 하위권 학생이 몰리면 학습 효율과 공정성이 흔들립니다.</p><p class="mini-label">GOAL</p><p>성적 데이터를 이용해 모든 조의 성적 합산과 평균이 균등해지는 조 편성 자동화</p></article>
+      <article class="card"><h2><span class="n">02</span>가중치 이분 그래프</h2><p>상위권 학생 그룹 A와 하위권 학생 그룹 B를 정점으로 두고, 가능한 조합을 간선으로 연결합니다.</p><div class="matching"><div class="people"><span class="node">98점</span><span class="node">82점</span><span class="node">69점</span></div><div class="links"><i></i><i></i><i></i></div><div class="jobs"><span class="node">42점</span><span class="node">58점</span><span class="node">71점</span></div></div></article>
+      <article class="card wide"><h2><span class="n">03</span>최대 가중치 매칭으로 최적 조합 찾기</h2><p>두 학생의 조 평균이 전체 목표 평균에 가까울수록 더 높은 가중치를 부여합니다. 모든 학생이 한 번씩만 연결되면서 가중치 총합이 최대가 되는 조합을 선택합니다.</p><div class="process"><div class="step">성적 입력<br>및 정렬</div><div class="arrow">→</div><div class="step">균형 점수<br>가중치 계산</div><div class="arrow">→</div><div class="step">최대 가중치<br>매칭 결과</div></div></article>
+      <article class="card"><h2><span class="n">04</span>핵심 알고리즘</h2><p>목표 평균과의 차이가 작을수록 높은 우선순위를 가지도록 가중치를 계산합니다.</p><div class="code"><span class="accent">def</span> calculate_edge_weight(a, b, target):
+  group_avg = (a + b) / 2
+  <span class="coral">weight</span> = 100 - abs(target - group_avg)
+  <span class="accent">return</span> weight
+
+<span class="accent">#</span> highest-weight matching on graph</div></article>
+      <article class="card"><h2><span class="n">05</span>구현과 디버깅</h2><ul><li>Python Streamlit 기반 입력·결과 화면 구현</li><li>단순 등수 짝짓기로 생긴 다인 조 편향 오류 발견</li><li>조 평균과 전체 평균의 편차 최소화 조건을 프롬프트에 명시</li></ul><p class="mini-label">OBJECTIVE FUNCTION + AI CODING</p></article>
+    </section>
+    <section class="quote"><p>“각 간선에 (전체 평균 - 조 평균)<sup>2</sup> 손실 가중치를 부여해, 가중치 합이 최소가 되도록 매칭하라.”</p><span>REVISED PROMPT / BALANCED GROUPING SUCCESS</span></section>
+    <section class="outcomes"><div class="outcome"><b>테스트 결과</b><p>12명, 40~100점 분포에서 모든 조 평균 오차를 2.5점 이내로 달성</p></div><div class="outcome"><b>연구 의의</b><p>가중치 그래프 이론이 실제 학급의 공정한 조 배정에 활용됨을 확인</p></div><div class="outcome"><b>향후 계획</b><p>성적과 친밀도·선호도를 함께 반영하는 다중 가중치 매칭으로 확장</p></div></section>
+    <footer><span class="mark">BALANCE / MATCH / LEARN</span><span>GRADE-BASED TEAM APP · 2026</span></footer>
+  </main>
+</body>
+</html>
